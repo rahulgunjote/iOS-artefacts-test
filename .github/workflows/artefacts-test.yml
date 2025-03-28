@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Test-2
-        path: TestResult/Test-2.xcresult
+        path: TestResults/Test-2.xcresult
 
   download_files:
     needs: [upload_file_1, upload_file_2]

@@ -47,9 +47,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install Xcode Command Line Tools
-      run: |
-        xcode-select --install
+    # - name: Install Xcode Command Line Tools
+    #   run: |
+    #     xcode-select --install
 
     - name: Install xcresult-merger
       run: |

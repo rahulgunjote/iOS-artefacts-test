@@ -66,10 +66,16 @@ jobs:
       with:
         name: Test-2
         path: DownloadedTestResults/Test-2.xcresult
-
+    
     - name: Display file contents
       run: |
         ls -la DownloadedTestResults
+    
+    - name: Upload Downloaded files
+      uses: actions/upload-artifact@v4
+      with:
+        name: DownloadedTestResults
+        path: DownloadedTestResults
 
     - name: Merge xcresult files
       run: |

@@ -39,11 +39,22 @@ jobs:
       with:
         name: Test-2
         path: TestResults/Test-2.xcresult
-
-  download_files:
+ 
+  merge-and-process-coverage:
     needs: [upload_file_1, upload_file_2]
     runs-on: macos-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Xcode Command Line Tools
+      run: |
+        xcode-select --install
+
+    - name: Install xcresult-merger
+      run: |
+        brew install xcresult-merger
+
     - name: Download file 1
       uses: actions/download-artifact@v4
       with:
@@ -55,22 +66,24 @@ jobs:
       with:
         name: Test-2
         path: DownloadedTestResults/Test-2.xcresult
-    - name: Display Test-1
-      if: always()
-      uses: dorny/test-reporter@v1.9.1
-      with:
-          name: 📝 Test Report 1
-          path: "DownloadedTestResults/Test-1.xcresult"
-          reporter: swift-xunit
-          list-tests: 'failed'
-    - name: Display Test-2
-      if: always()
-      uses: dorny/test-reporter@v1.9.1
-      with:
-          name: 📝 Test Report 2
-          path: "DownloadedTestResults/Test-2.xcresult"
-          reporter: swift-xunit
-          list-tests: 'failed'
+
     - name: Display file contents
       run: |
         ls -la DownloadedTestResults
+
+    
+    - name: Merge xcresult files
+      run: |
+        xcresult-merger merge --input DownloadedTestResults/Test-1.xcresult --input DownloadedTestResults/Test-2.xcresult --output DownloadedTestResults/merged.xcresult
+      # Replace paths with the actual locations of your xcresult files
+
+    - name: Extract Code Coverage Data
+      run: |
+        xcrun xcresulttool --path DownloadedTestResults/merged.xcresult get --format json > merged_coverage.json
+      # The merged coverage data will be saved as JSON
+
+    - name: Upload Code Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: merged_coverage.json
+

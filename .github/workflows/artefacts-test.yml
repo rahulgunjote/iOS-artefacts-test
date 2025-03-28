@@ -51,9 +51,9 @@ jobs:
     #   run: |
     #     xcode-select --install
 
-    - name: Install xcresult-merger
+    - name: Install xcresultparser
       run: |
-        brew install xcresult-merger
+        brew install xcresultparser
 
     - name: Download file 1
       uses: actions/download-artifact@v4
@@ -71,19 +71,12 @@ jobs:
       run: |
         ls -la DownloadedTestResults
 
-    
     - name: Merge xcresult files
       run: |
-        xcresult-merger merge --input DownloadedTestResults/Test-1.xcresult --input DownloadedTestResults/Test-2.xcresult --output DownloadedTestResults/merged.xcresult
-      # Replace paths with the actual locations of your xcresult files
+        xcrun xcresulttool merge DownloadedTestResults/Test-1.xcresult DownloadedTestResults/Test-2.xcresult --output-path=DownloadedTestResults/Result_merged.xcresult
 
-    - name: Extract Code Coverage Data
+    - name: Print
       run: |
-        xcrun xcresulttool --path DownloadedTestResults/merged.xcresult get --format json > merged_coverage.json
-      # The merged coverage data will be saved as JSON
-
-    - name: Upload Code Coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: merged_coverage.json
+        xcresultparser -o cli DownloadedTestResults/Result_merged.xcresult
+  
 

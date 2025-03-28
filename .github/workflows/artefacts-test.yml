@@ -59,13 +59,13 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: Test-1
-        path: DownloadedTestResults
+        path: DownloadedTestResults/Test-1
         
     - name: Download file 2
       uses: actions/download-artifact@v4
       with:
         name: Test-2
-        path: DownloadedTestResults/
+        path: DownloadedTestResults/Test-2
     
     - name: Display file contents
       run: |

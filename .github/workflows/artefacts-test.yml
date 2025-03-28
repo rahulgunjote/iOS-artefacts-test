@@ -6,21 +6,24 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+  actions: write
+  checks: write
+  pull-requests: write
+
 jobs:
   upload_file_1:
     runs-on: macos-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
-    - name: Create sample file 1
-      run: echo "This is file 1 content" > file1.txt
-      
+    
     - name: Upload file 1
       uses: actions/upload-artifact@v3
       with:
-        name: file1-artifact
-        path: file1.txt
+        name: Test-1
+        path: TestResults/Test-1.xcresult
 
   upload_file_2:
     runs-on: macos-latest
@@ -34,8 +37,8 @@ jobs:
     - name: Upload file 2
       uses: actions/upload-artifact@v3
       with:
-        name: file2-artifact
-        path: file2.txt
+        name: Test-2
+        path: TestResult/Test-2.xcresult
 
   download_files:
     needs: [upload_file_1, upload_file_2]
@@ -44,16 +47,15 @@ jobs:
     - name: Download file 1
       uses: actions/download-artifact@v3
       with:
-        name: file1-artifact
+        name: Test-1
+        path: DownloadedTestResults/Test-1
         
     - name: Download file 2
       uses: actions/download-artifact@v3
       with:
-        name: file2-artifact
+        name: Test-2
+        path: DownloadedTestResults/Test-2
         
     - name: Display file contents
       run: |
-        echo "File 1 content:"
-        cat file1.txt
-        echo "File 2 content:"
-        cat file2.txt
+        ls -la DownloadedTestResults

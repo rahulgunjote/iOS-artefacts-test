@@ -55,7 +55,22 @@ jobs:
       with:
         name: Test-2
         path: DownloadedTestResults/Test-2.xcresult
-        
+    - name: Display Test-1
+      if: always()
+      uses: dorny/test-reporter@v1.9.1
+      with:
+          name: 📝 Test Report 1
+          path: "DownloadedTestResults/Test-1.xcresult"
+          reporter: swift-xunit
+          list-tests: 'failed'
+    - name: Display Test-2
+      if: always()
+      uses: dorny/test-reporter@v1.9.1
+      with:
+          name: 📝 Test Report 2
+          path: "DownloadedTestResults/Test-2.xcresult"
+          reporter: swift-xunit
+          list-tests: 'failed'
     - name: Display file contents
       run: |
         ls -la DownloadedTestResults

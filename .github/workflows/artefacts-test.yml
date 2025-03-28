@@ -8,7 +8,7 @@ on:
 
 jobs:
   upload_file_1:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
         path: file1.txt
 
   upload_file_2:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
 
   download_files:
     needs: [upload_file_1, upload_file_2]
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - name: Download file 1
       uses: actions/download-artifact@v3
